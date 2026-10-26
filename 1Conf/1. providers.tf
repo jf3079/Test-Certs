@@ -9,6 +9,12 @@ terraform {
       version = "~> 2.0"
     }
   }
+  cloud {
+    organization = "KubOrg1"
+    workspaces {
+      name = "Test-Certs"
+    }
+  }
 }
 
 provider "aws" {

@@ -1,0 +1,1 @@
+{"cert_arn":"arn:aws:acm:us-east-1:031332257227:certificate/6f90f1a9-95c5-42e6-8210-096145dad824","dest_account_id":"031332257227","dest_region":"us-west-2","role_name":"CertificateImportRole","secret_name":"acm/export_passphrase","source_region":"us-east-1"}

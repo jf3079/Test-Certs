@@ -1,6 +1,6 @@
 locals {
   source_certificates_map_cc = {
-    "KUBRAIO" = {
+    "Test" = {
       account_ids = ["031332257227", ]
       regions     = ["us-east-2", ]
       certs = [

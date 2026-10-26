@@ -4,6 +4,10 @@ locals {
       number = 101
     }
     //
+    "test1.jf30.dedyn.io" = {
+      number = 101
+    }
+    //
   }
 }
 

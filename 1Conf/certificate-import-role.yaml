@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  IAM role and inline policy for cross-account ACM certificate import and
+  export of certificates (body, chain, private key) to Secrets Manager.
+  Mirrors the Terraform aws_iam_role.certificate_import_role /
+  aws_iam_role_policy.certificate_import_role_policy resources.
+  Values are fixed in-template (no Parameters section) so there is
+  nothing to override at deploy time. Intended stack name:
+  CreateCertificateImportRole.
+
+Resources:
+
+  CertificateImportRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: CertificateImportRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: TrustSourceAccount
+            Effect: Allow
+            Principal:
+              AWS: 'arn:aws:iam::031332257227:root'
+            Action: 'sts:AssumeRole'
+
+  CertificateImportRolePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: CertificateImportRole-policy
+      Roles:
+        - !Ref CertificateImportRole
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowImportCertificate
+            Effect: Allow
+            Action:
+              - 'acm:ImportCertificate'
+            Resource: '*'
+          - Sid: AllowAcmReadAccess
+            Effect: Allow
+            Action:
+              - 'acm:DescribeCertificate'
+              - 'acm:GetCertificate'
+              - 'acm:ListCertificates'
+            Resource: '*'
+          - Sid: AllowCertificateSecretsWrite
+            Effect: Allow
+            Action:
+              - 'secretsmanager:CreateSecret'
+              - 'secretsmanager:PutSecretValue'
+              - 'secretsmanager:GetSecretValue'
+              - 'secretsmanager:DescribeSecret'
+              - 'secretsmanager:TagResource'
+            Resource: !Sub 'arn:${AWS::Partition}:secretsmanager:*:${AWS::AccountId}:secret:acm-export/*'
+
+Outputs:
+  CertificateImportRoleArn:
+    Description: ARN of the CertificateImportRole
+    Value: !GetAtt CertificateImportRole.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-CertificateImportRoleArn'
+
+  CertificateImportRoleName:
+    Description: Name of the CertificateImportRole
+    Value: !Ref CertificateImportRole

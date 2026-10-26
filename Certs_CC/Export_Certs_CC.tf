@@ -8,5 +8,13 @@ locals {
       ]
     }
     //
+    "Test1" = {
+      account_ids = ["031332257227", ]
+      regions     = ["us-west-2", ]
+      certs = [
+        "test1.jf30.dedyn.io", # 101
+      ]
+    }
+    //
   }
 }

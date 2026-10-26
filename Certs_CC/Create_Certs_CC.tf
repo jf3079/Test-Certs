@@ -5,7 +5,7 @@ locals {
     }
     //
     "test1.jf30.dedyn.io" = {
-      number = 101
+      number = 102
     }
     //
   }
